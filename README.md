@@ -1,13 +1,13 @@
-## Practical Machine Learning
-Learn the basic components of building and applying prediction functions with an emphasis on practical applications. This is the eighth course in the Johns Hopkins Data Science Specialization.
+## Developing Data Products
+Learn the basics of creating data products using Shiny, R packages, and interactive graphics. This is the ninth course in the Johns Hopkins Data Science Specialization.
 
 #### About the Course
-One of the most common tasks performed by data scientists and data analysts are prediction and machine learning. This course will cover the basic components of building and applying prediction functions with an emphasis on practical applications. The course will provide basic grounding in concepts such as training and tests sets, overfitting, and error rates. The course will also introduce a range of model based and algorithmic machine learning methods including regression, classification trees, Naive Bayes, and random forests. The course will cover the complete process of building prediction functions including data collection, feature creation, algorithms, and evaluation.
+A data product is the production output from a statistical analysis. Data products automate complex analysis tasks or use technology to expand the utility of a data informed model, algorithm or inference. This course covers the basics of creating data products using Shiny, R packages, and interactive graphics. The course will focus on the statistical fundamentals of creating a data product that can be used to tell a story about data to a mass audience.
 
 #### Course Syllabus
-Upon completion of this course you will understand the components of a machine learning algorithm. You will also know how to apply multiple basic machine learning tools. You will also learn to apply these tools to build and evaluate predictors on real data.
+Students will learn how communicate using statistics and statistical products. Emphasis will be paid to communicating uncertainty in statistical results. Students will learn how to create simple Shiny web applications and R packages for their data products.
 
 #### Instructors
+- [Brian Caffo, PhD, Johns Hopkins University](https://www.coursera.org/instructor/~47)
 - [Jeff Leek, PhD, Johns Hopkins University](https://www.coursera.org/instructor/~315)
 - [Roger D. Peng, PhD, Johns Hopkins University](https://www.coursera.org/instructor/rdpeng)
-- [Brian Caffo, PhD, Johns Hopkins University](https://www.coursera.org/instructor/~47)
