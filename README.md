@@ -1,13 +1,13 @@
-## Reproducible Research
-Learn the concepts and tools behind reporting modern data analyses in a reproducible manner. This is the fifth course in the Johns Hopkins Data Science Specialization.
+## Statistical Inference
+Learn how to draw conclusions about populations or scientific truths from data. This is the sixth course in the Johns Hopkins Data Science Course Track.
 
 #### About the Course
-This course focuses on the concepts and tools behind reporting modern data analyses in a reproducible manner. Reproducible research is the idea that data analyses, and more generally, scientific claims, are published with their data and software code so that others may verify the findings and build upon them. The need for reproducibility is increasing dramatically as data analyses become more complex, involving larger datasets and more sophisticated computations. Reproducibility allows for people to focus on the actual content of a data analysis, rather than on superficial details reported in a written summary. In addition, reproducibility makes an analysis more useful to others because the data and code that actually conducted the analysis are available. This course will focus on literate statistical analysis tools which allow one to publish data analyses in a single document that allows others to easily execute the same analysis to obtain the same results.
+Statistical inference is the process of drawing conclusions about populations or scientific truths from data. There are many modes of performing inference including statistical modeling, data oriented strategies and explicit use of designs and randomization in analyses. Furthermore, there are broad theories (frequentists, Bayesian, likelihood, design based, …) and numerous complexities (missing data, observed and unobserved confounding, biases) for performing inference. A practitioner can often be left in a debilitating maze of techniques, philosophies and nuance. This course presents the fundamentals of inference in a practical approach for getting things done. After taking this course, students will understand the broad directions of statistical inference and use this information for making informed choices in analyzing data.
 
 #### Course Syllabus
-In this course you will learn to write a document using R markdown, integrate live R code into a literate statistical program, compile R markdown documents using knitr and related tools, and organize a data analysis so that it is reproducible and accessible to others.
+In this class students will learn the fundamentals of statistical inference. Students will receive a broad overview of the goals, assumptions and modes of performing statistical inference. Students will be able to perform inferential tasks in highly targeted settings and will be able to use  the skills developed as a roadmap for more complex inferential challenges.
 
 #### Instructors
-- [Roger D. Peng, PhD, Johns Hopkins University](https://www.coursera.org/instructor/rdpeng)
-- [Jeff Leek, PhD, Johns Hopkins University](https://www.coursera.org/instructor/~315) 
 - [Brian Caffo, PhD, Johns Hopkins University](https://www.coursera.org/instructor/~47)
+- [Jeff Leek, PhD, Johns Hopkins University](https://www.coursera.org/instructor/~315)
+- [Roger D. Peng, PhD, Johns Hopkins University](https://www.coursera.org/instructor/rdpeng)
