@@ -159,7 +159,7 @@ data_tidy <- subject_merged %>%
              summarize_each(funs(mean))
 ```
 
-Finally, we write `data_tidy` to a text file named tidy.txt, which you can find here.
+Finally, we write `data_tidy` to a text file named tidy.txt, which you can find [here](https://github.com/clampork/coursera-datascience/blob/3-getting-and-cleaning-data/project/tidy.txt).
 ```R
 write.table(data_tidy, "tidy.txt", quote = FALSE)
 ```
