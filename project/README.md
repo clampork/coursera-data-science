@@ -25,7 +25,7 @@ if(!dir.exists(data_dir)) {
 }
 ```
 
-#### Step 1: Merge the training and the test sets to create one data set
+#### Step 1: Merge the training and the test sets to create one dataset
 From README.txt in the data directory, we learn that the training and test sets are stored in train/X_train.txt and test/X_test.txt respectively. Here, we read both files into variables `x_train` and `x_test`, merging both with dplyr's `bind_rows` function. 
 ```R
 x_train <- read.table(paste0(data_dir, "/train/X_train.txt"))
@@ -68,7 +68,7 @@ names(y_merged) <- 'activity'
 data_merged <- bind_cols(y_merged, x_subset)
 ```
 
-#### Step 4: Appropriately label the data set with descriptive variable names 
+#### Step 4: Appropriately label the dataset with descriptive variable names 
 Here are the variable names in `data_merged`:
 ```R
 names(data_merged)
@@ -143,7 +143,7 @@ Now when we run `names(data_merged)` again, we see our new snake-case variable n
 [67] "freq_body_gyro_jerk_mag_std" 
 ```
 
-#### Step 5: Create an independent tidy data set with the average of each variable for each activity and each subject
+#### Step 5: Create an independent tidy dataset with the average of each variable for each activity and each subject
 From README.txt in the data directory, we learn that the training and test subject IDs are stored in train/subject_train.txt and test/subject_test.txt respectively. As before, we read those sets into variables and merge them into `subject_merged` with 'subject' as the variable name.
 ```R
 subject_train <- read.table(paste0(data_dir, "/train/subject_train.txt"))
