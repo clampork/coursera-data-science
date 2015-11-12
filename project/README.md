@@ -1,7 +1,7 @@
 ## Getting and Cleaning Data: Course Project
 For this project, we examine a dataset collected from experiments carried out amongst a group of 30 volunteers, each performing six different activities while wearing a Samsung Galaxy S II smartphone on their person. A full description of the study may be found [here](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones), and the dataset may be downloaded directly from [here](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip).
 
-#### The script and dependencies
+#### The script and its dependencies
 run_analysis.R is an R script that cleans the abovementioned dataset and outputs a tidy dataset for use in further analysis. It requires the `dplyr` package, which you can install by running:
 ```R
 install.packages("dplyr")
