@@ -57,9 +57,9 @@ subject_merged <- bind_rows(subject_train, subject_test)
 names(subject_merged) <- "subject"
 
 data_tidy <- subject_merged %>% 
-             bind_cols(data_merged) %>%
-             group_by(subject, activity) %>% 
-             summarize_each(funs(mean))
+                 bind_cols(data_merged) %>%
+                 group_by(subject, activity) %>% 
+                 summarize_each(funs(mean))
 
 write.table(data_tidy, 
             file = "tidy.txt", 
