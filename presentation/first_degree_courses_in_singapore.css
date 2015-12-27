@@ -1,0 +1,39 @@
+.slides h1 {
+  font-size: 1.7em;
+  font-weight: 100;
+}
+
+.slides .present p {
+  color: #b3b3b3;
+  font-weight: 100;
+}
+
+.section .reveal .state-background {
+  background: url('https://raw.githubusercontent.com/clampork/coursera-datascience/9-developing-data-products/project/www/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.template_full .reveal h3, .template_2_col .reveal h3 {
+  color: #12a5cb;
+  font-size: 1.7em;
+  font-weight: 100;
+  text-align: center;
+}
+
+.template_full .reveal p, .template_2_col .reveal p {
+  color: #b3b3b3;
+  font-size: 1em;
+  font-weight: 100;
+}
+
+.template_full pre code, .template_2_col pre code {
+  font-size: 0.5em;
+}
+
+.template_full .reveal p {
+  text-align: center;    
+}
+
+.template_2_col .reveal p {
+  text-align: left;
+}
