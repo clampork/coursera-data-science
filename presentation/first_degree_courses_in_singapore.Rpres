@@ -1,0 +1,149 @@
+First degree courses in Singapore
+========================================================
+author: Kai Chan
+date: December 25, 2015
+transition: rotate
+font-family: 'Avenir'
+
+Premise
+========================================================
+type: template_full
+
+Higher education in Singapore has always a been a key
+area of emphasis. The city state's pursuit of building a
+knowledge-based economy is predicated on its lack of
+natural resources, bringing to bear its reliance on
+human capital.
+
+The purpose of this app is to identify trends in how
+students are selecting courses for their first degrees
+across Singapore's 
+[six universities](https://en.wikipedia.org/wiki/Education_in_Singapore#Universities). We base our app on 
+[data](https://data.gov.sg/dataset/graduates-from-university-first-degree-courses-by-type-of-course) from data.gov.sg---first loading and cleaning the 
+dataset in R, then building and deploying an interactive 
+[Shiny app](https://clampork.shinyapps.io/first_degree_courses_in_singapore)
+that allows us to observe the trends in enrollment 
+proportion for different degree courses over the years.
+
+The dataset
+========================================================
+type: template_2_col
+
+Our dataset is from
+[data.gov.sg](https://data.gov.sg)
+, a platform for publicly-available Singapore government
+data. To prepare the dataset for our app, we use the
+`dplyr` package in R to read, aggregate and process
+raw data into a clean `tbl_df` data frame. You can find
+the source code 
+[here](https://github.com/clampork/coursera-datascience/blob/9-developing-data-products/project/data_processing.R)
+.
+
+***
+
+```{r echo = FALSE}
+library(dplyr)
+
+# Load dataset
+url <- "https://data.gov.sg/dataset/edcc4d35-08e0-4ebd-b3bb-ac3a6a10c103/resource/eb8b932c-503c-41e7-b513-114cffbe2338/download/Graduates-From-University-First-Degree-Courses.csv"
+file <- basename(url)
+
+if(!file.exists(file)) {
+    library(downloader)
+    download(url, file, mode = "wb")
+}
+
+df_raw <- tbl_df(read.csv(file, na.strings = "na"))
+
+# Aggregate and clean dataset
+df_agg <- df_raw %>%
+    na.omit() %>%
+    group_by(year) %>%
+    summarize(graduates = sum(no_of_graduates))
+
+df_cleaned <- df_raw %>%
+    na.omit() %>%
+    left_join(df_agg) %>%
+    mutate(proportion = no_of_graduates * 100 / graduates)
+```
+
+```{r}
+select(df_cleaned, year, sex, type_of_course, proportion)
+```
+
+Visualizing our data
+========================================================
+type: template_2_col
+
+Next, we plot our cleaned data frame with the `ggplot2`
+package. On the right is the non-interactive form of our
+plot for the Accountancy course.
+
+To add a layer of interactivity, we build a Shiny app
+by writing
+[server.R](https://github.com/clampork/coursera-datascience/blob/9-developing-data-products/project/server.R)
+and
+[ui.R](https://github.com/clampork/coursera-datascience/blob/9-developing-data-products/project/ui.R)
+scripts. You can find the full source code for each by
+following the links.
+
+***
+
+```{r echo = FALSE}
+library(dplyr)
+library(ggplot2)
+
+# Load dataset
+url <- "https://data.gov.sg/dataset/edcc4d35-08e0-4ebd-b3bb-ac3a6a10c103/resource/eb8b932c-503c-41e7-b513-114cffbe2338/download/Graduates-From-University-First-Degree-Courses.csv"
+file <- basename(url)
+
+if(!file.exists(file)) {
+    library(downloader)
+    download(url, file, mode = "wb")
+}
+
+df_raw <- tbl_df(read.csv(file, na.strings = "na"))
+
+# Aggregate and clean dataset
+df_agg <- df_raw %>%
+    na.omit() %>%
+    group_by(year) %>%
+    summarize(graduates = sum(no_of_graduates))
+
+df_cleaned <- df_raw %>%
+    na.omit() %>%
+    left_join(df_agg) %>%
+    mutate(proportion = no_of_graduates * 100 / graduates)
+
+df_subset <- df_cleaned %>% 
+    filter(type_of_course == 'Accountancy')
+        
+ggplot(data = df_subset, aes(x = year, y = proportion, fill = factor(sex))) +
+    geom_bar(stat = "identity", position = "dodge") +
+    geom_smooth(alpha = 0, color = "#b3b3b3", linetype = "dotted") +
+    labs(x = "Year",
+         y = "Percentage (%)") +
+    scale_x_continuous(limits = c(1993 - 0.5, 2014 + 0.5),
+                       breaks = seq(1993, 2014, 2)) +
+    scale_fill_manual(name = "Gender",
+                      values = c("#cb1249", "#12a5cb")) +
+    theme_minimal() +
+    theme(axis.title = element_text(color = "#b3b3b3"),
+          axis.text = element_text(color = "#b3b3b3"),
+          axis.ticks = element_line(color = "#b3b3b3"),
+          legend.text = element_text(color = "#b3b3b3"),
+          legend.title = element_text(color = "#b3b3b3"),
+          panel.grid = element_blank())
+```
+
+References
+========================================================
+type: template_full
+
+We think this app will prove useful for future analyses
+on Singaporean education trends, and hope you have fun
+interacting with our dataset.
+
+- [Shiny app: First degree courses in Singapore](https://clampork.shinyapps.io/first_degree_courses_in_singapore)
+- [Source code: GitHub repository](https://github.com/clampork/coursera-datascience/tree/9-developing-data-products/project)
+- [Original dataset: data.gov.sg](https://data.gov.sg/dataset/graduates-from-university-first-degree-courses-by-type-of-course)
