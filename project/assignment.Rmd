@@ -1,0 +1,116 @@
+---
+output: 
+    html_document:
+        theme: "cosmo"
+---
+
+<center>
+## Prediction assignment writeup
+#### Kai Chan
+##### 31 January, 2016     
+</center>
+
+<br>
+
+### Introduction
+Using devices such as [Jawbone Up][1], [Nike FuelBand][2], and [Fitbit][3] it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement---a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. For our model, we draw data taken from accelerometers on the belt, forearm, arm, and dumbell of 6 participants, who were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website [here][4] (see the section on the Weight Lifting Exercise Dataset).
+
+Through machine learning, we seek to predict the manner in which they did the exercise, represented by the *classe* variable in the training set. This paper explores how we built our model, including how cross validation was used and what we expected out-of-sample error to be.
+
+<br>
+
+### Loading, cleaning and splitting data
+First, we load up our [training][5] and [test][6] datasets, along with libraries we will use to build our model. Exploratory data analysis reveals Microsoft Excel zero divide errors in the dataset, along with `NA` and empty values, so we go ahead and specify those within the `na.strings` argument.
+
+```{r cache = TRUE, message = FALSE}
+library(caret)
+library(randomForest)
+library(gbm)
+
+url_train <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+url_test <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+df_train <- read.csv(url_train, na.strings = c("NA", "#DIV/0!", ""))
+df_test <- read.csv(url_test, na.strings = c("NA", "#DIV/0!", ""))
+```
+
+Next, we set a seed for reproducibility and split the training dataset up into a smaller training dataset (60%) and a testing dataset (40%) to run our model against. Because we are looking specifically at the *classe* variable, we subset our data to only include that variable.
+
+```{r cache = TRUE}
+set.seed(66)
+in_train = createDataPartition(y = df_train$classe, p = 0.6, list = FALSE)
+train = df_train[in_train, ]
+test = df_train[-in_train, ]
+```
+
+Finally, we clean our datasets by performing a series of transformations. We remove near-zero variance predictors to omit dummy variables, the ID variable from the training set, and any variable with the majority of its values equal to `NA` from the training set. For that last step, exploratory analysis reveals a dichotomy in the way `NA` values are distributed---variables either have no `NA` values or upwards of 97.8%, so we remove the latter category of variables from our dataset. We then 
+
+```{r cache = TRUE}
+# Remove near-zero variance predictors
+nzv_train <- nearZeroVar(train, saveMetrics = TRUE)
+nzv_test <- nearZeroVar(test, saveMetrics = TRUE)
+cleaned_train_nzv <- train[, nzv_train$nzv == FALSE]
+cleaned_test_nzv <- test[, nzv_test$nzv == FALSE]
+
+# Remove ID variable from training set
+cleaned_train_id <- cleaned_train_nzv[c(-1)]
+
+# Remove variables with majority NA values from training set
+threshold <- 0.978
+na_train <- sapply(cleaned_train_id, 
+                   function(x) sum(is.na(x))/nrow(cleaned_train_id))
+na_train_subset <- subset(na_train, na_train < threshold)
+cleaned_train <- cleaned_train_id[names(na_train_subset)]
+
+# Transform cleaned_test_nzv and df_test sets to match cleaned_train variables
+cleaned_test <- cleaned_test_nzv[names(cleaned_train)]
+cleaned_df_test <- df_test[names(cleaned_train)[-58]]
+
+# Match cleaned_train and cleaned_df_test variable classes
+cleaned_df_test[, 56] <- as.numeric(cleaned_df_test[, 56])
+cleaned_df_test[, 57] <- as.numeric(cleaned_df_test[, 57])
+cleaned_df_test <- rbind(cleaned_train[2, -58], cleaned_df_test)[-1, ]
+```
+
+<br>
+
+### Predicting with machine learning algorithms
+The two algorithms we selected with which to train our model are [random forests][7] and [generalized boosted regression][8]. Through the construction of decision trees, these algorithms perform feature selection and do not require assumptions in linearity between variables in the data, rendering them perfect for our purposes. In each case, we perform cross-validation by fitting our models to our training set and then running them against our test set.
+
+Because random forest models only have one hyperparameter (number of features selected at each node) while generalized boosted regression models have several (number of trees, depth, shrinkage), we expect the former to be less likely to overfit and yield greater accuracy.
+
+#### Random forests
+```{r cache = TRUE}
+set.seed(66)
+model_rf <- randomForest(classe ~ ., data = cleaned_train)
+prediction_rf <- predict(model_rf, cleaned_test, type = "class")
+confusionMatrix(prediction_rf, cleaned_test$classe)
+```
+
+#### Generalized boosted regression
+```{r cache = TRUE, message = FALSE}
+set.seed(66)
+model_gbm <- train(classe ~ ., data = cleaned_train, method = "gbm", verbose = FALSE)
+prediction_gbm <- predict(model_gbm, cleaned_test)
+confusionMatrix(prediction_gbm, cleaned_test$classe)
+```
+
+#### Model selection and out-of-sample error
+From the confusion matrices of each model, we observe that our random forest model yields an accuracy of 99.89%, while that of our generalized boosted regression model is 99.73%. As such, we will use the more accurate random forest model to predict exercise form and estimate our out-of-sample error to be approximately 0.11%.
+
+<br>
+
+### Predictions on test set
+In the second part of the assignment, we apply our selected algorithm to 20 different test cases in our `df_test` dataset. Results are displayed below.
+
+```{r cache = TRUE, message = FALSE}
+predict(model_rf, cleaned_df_test, type = "class")
+```
+
+[1]: https://jawbone.com/up
+[2]: https://secure-nikeplus.nike.com/plus/products/fuelband
+[3]: https://fitbit.com
+[4]: http://groupware.les.inf.puc-rio.br/har
+[5]: https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv
+[6]: https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
+[7]: https://en.wikipedia.org/wiki/Random_forest
+[8]: https://en.wikipedia.org/wiki/Gradient_boosting
